@@ -7,8 +7,15 @@ const getPersona = async () => { //este trae de la hoja estudiantes
     return registros
 }
 
+async function post(objeto){
+    const registro =  await personaSheet.post(objeto)
+    console.log("personaService post -> " + registro.id)
+    return registro
+} 
+
 
 
 module.exports = {
-    getPersona:getPersona
+    getPersona:getPersona,
+    postPersona: post
 } 

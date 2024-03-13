@@ -2,14 +2,14 @@ const { GoogleSpreadsheetRow } = require('google-spreadsheet')
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 const credenciales = require('../json/credecialSheets.json')
 
-let googleId = "1Pq0bh9zDZXtd1F0kAcikS_NYTquFQWYm5Dsggkkztng"
+let googleId = process.env.SHEET_URI
 let documento = new GoogleSpreadsheet(googleId)
-let sheet
+let sheetId = 1735206058
 
 async function obtenercredenciales(){
     await documento.useServiceAccountAuth(credenciales)
     await documento.loadInfo()
-    sheet = documento.sheetsById[0]
+    sheet = documento.sheetsByIndex[sheetId]
     return documento
 }
 
@@ -48,12 +48,10 @@ async function getPorCurso(){
 
 async function post(objeto) {
     const documento = await obtenercredenciales()
-
-    const sheet = documento.sheetsById[0]
-    await sheet.addRow(objeto)
-    //console.log("se creó nuevo ",objeto)
+    const sheet = documento.sheetsById[sheetId]
+    persona = await sheet.addRow(objeto)
+    console.log("personaSheet: se creó nuevo ",persona)
     return objeto
-    
 }
 
 async function put(cargo) {

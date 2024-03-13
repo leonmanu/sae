@@ -8,12 +8,9 @@ const estudianteCursoService = require('../services/estudianteCurso.service')
 
 
 const get = async (req, res) => {
-   // registros = await cursoSheet.get()
-   if (req.user) {
-    res.render('pages/index', {user: req.user._json})
-   } else {
-    res.render('pages/index', {user: null})
-   }
+   estudiantes = estudianteService.get()
+
+   await res.render('pages/estudiante/estudiantesLista', {user: req.user._json, estudiantes})
 }
 
 const getTodos = async (req, res) => {
@@ -67,9 +64,13 @@ const pintarForm = (req, res) => {
     res.render('pages/formulario')
 }
 
-const post = (req, res) => {
-    sheet.post(req.body)
-    res.redirect('/')
+const post = async (req, res) => {
+    const objeto = req.body
+    estudiante = await estudianteService.post(objeto)
+    await console.log("ESTUDIANTE -> "+estudiante.apellido)
+    res.send(estudiante)
+
+    //res.redirect('/')
 }
 
 const put = async (req, res) => {

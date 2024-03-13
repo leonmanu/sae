@@ -4,13 +4,14 @@ const router = Router()
 
 const estudianteSchema = require('../models/estudiante.schema')
 
-const { getRolTodo} = require('../controllers/rol.controller')
-const {getPorCursoAsignatura, getPorId, put, getTodos, getTodosLista } = require('../controllers/estudiante.controller')
+const { post } = require('../controllers/estudiante.controller')
+const {getPorCursoAsignatura, getPorId, put, getTodos, getTodosLista, get } = require('../controllers/estudiante.controller')
 
 var sessionMiddelware = require('../middelware/session.middelware')
 
 router
-    .post('/', getRolTodo)
+    .post('/', post)
+    .get('/', get)
     .get('/curso/:curso/asignatura/:asignatura', getPorCursoAsignatura)
     .get('/:id/editar', getPorId)
     .post('/editar', put)
