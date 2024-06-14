@@ -8,15 +8,51 @@ const estudianteCursoService = require('../services/estudianteCurso.service')
 
 
 const get = async (req, res) => {
-   estudiantes = estudianteService.get()
+    try {
+        let estudiantes = await estudianteService.get();
+        let cursos = await cursoService.get();
+        let estudianteCursos = await estudianteCursoService.get();
 
-   await res.render('pages/estudiante/estudiantesLista', {user: req.user._json, estudiantes})
+        for (const estudiante of estudiantes) {
+            for (const estudianteCurso of estudianteCursos) {
+                if (estudiante.id == estudianteCurso.idEstudiante) {
+                    for (const curso of cursos) {
+                        if (estudianteCurso.idCurso == curso.id) {
+                            estudiante.cLectivo = estudianteCurso.cLectivo
+                            estudiante.curso = curso.clave;
+                        }
+                    }
+                }
+            }
+        }
+
+        await res.render('pages/estudiante/estudiantesLista', { user: req.user._json, estudiantes });
+    } catch (error) {
+        // Handle errors appropriately
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
+
 const getTodos = async (req, res) => {
-    registros = await estudianteService.getTodosDb()
-    
-    await res.render('pages/estudiante/estudiantesTodos', registros)
+    estudiantes = await estudianteService.get()
+    cursos = await cursoService.get()
+    estudianteCursos = await estudianteCursoService.get()
+    for (const estudiante of estudiantes) {
+    for (const estudianteCurso of estudianteCursos) {
+        if (estudiante.id == estudianteCurso.idCampo) {
+            for (const curso of cursos) {
+                if (estudianteCurso.idCurso == curso.id) {
+                    estudiante.curso = curso.clave;
+                    console.log("CursoClave: " + campo.clave );
+                }
+                console.log("---------------")
+            }
+        }
+    }
+}
+   await res.render('pages/estudiante/estudiantesTodos', {estudiantes})
 } 
 
 const getPorCursoAsignatura = async (req,res) =>{
@@ -31,6 +67,21 @@ const getPorId = async (req, res) => {
     estudiante = registro
     //console.log("Estudiante:: ", estudiante)
     res.render('pages/estudiante/estudianteEditar', {estudiante, user: req.user._json})
+}
+
+const getFormularioAlta = async (req, res) => {
+    const registro = await estudianteService.getUno(req.params.dni)
+    let estudiante
+    if (registro) {
+        estudiante = registro
+        console.log("por sí")
+    }else{
+        estudiante = {
+            id: null
+        }
+        console.log("por no")
+    }
+    res.render("pages/estudiante/estudianteAlta", {user: req.user,estudiante})
 }
 
 const getTodosLista = async (req, res) => {
@@ -65,7 +116,7 @@ const pintarForm = (req, res) => {
 }
 
 const post = async (req, res) => {
-    const objeto = req.body
+    const objeto = await req.body
     estudiante = await estudianteService.post(objeto)
     await console.log("ESTUDIANTE -> "+estudiante.apellido)
     res.send(estudiante)
@@ -74,6 +125,14 @@ const post = async (req, res) => {
 }
 
 const put = async (req, res) => {
+    var objNuevo = req.body
+    var objExistente = await estudianteService.getPorId(objNuevo.id)
+    var resultado = await estudianteService.put(objExistente, objNuevo)
+    
+    res.redirect('back');
+}
+
+const alta = async (req, res) => {
     var objNuevo = req.body
     var objExistente = await estudianteService.getPorId(objNuevo.id)
     var resultado = await estudianteService.put(objExistente, objNuevo)
@@ -97,5 +156,7 @@ module.exports = {
     put : put,
     getPorCursoAsignatura: getPorCursoAsignatura,
     getPorId: getPorId,
-    getTodosLista: getTodosLista
+    getTodosLista: getTodosLista,
+    alta,
+    getFormularioAlta
 } 

@@ -23,7 +23,7 @@ const siExisteUsuario = async (req, res) => {
     if(req.user._json.domain === 'abc.gob.ar'){
         if(req.user.email == resultado.email){
            
-            res.redirect("/docente/cargo")
+            res.render('pages/subIndex', {user: req.user._json})
        } else {
             res.redirect("/usuarioAlta")
        }

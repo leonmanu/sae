@@ -5,6 +5,7 @@ const credenciales = require('../json/credecialSheets.json')
 let googleId = process.env.SHEET_URI
 let documento = new GoogleSpreadsheet(googleId)
 let sheetId = 1735206058
+let sheet
 
 async function obtenercredenciales(){
     await documento.useServiceAccountAuth(credenciales)
@@ -48,8 +49,8 @@ async function getPorCurso(){
 
 async function post(objeto) {
     const documento = await obtenercredenciales()
-    const sheet = documento.sheetsById[sheetId]
-    persona = await sheet.addRow(objeto)
+    persona = await 
+    await sheet.addRow(objeto)
     console.log("personaSheet: se creó nuevo ",persona)
     return objeto
 }

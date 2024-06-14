@@ -31,7 +31,7 @@ const getTodos = async (req, res) => {
 }
 
 const getTodosDb = async (req, res) => {
-    registros = await estudianteDb.getTodos()
+    registros = await estudianteSheet.get()
     console.log("Data: ",registros)
     return registros
 }
@@ -80,10 +80,10 @@ async function getPorCurso(clave){//1* anterior, próximo a borrar
     return resultadoJson
 }
 
-async function getPorIdCurso(idCurso){//1* este debería reemplazar a getPorCurso()
+async function getPorIdCurso(idParam){//1* este debería reemplazar a getPorCurso()
     const estudianteCurso =  await estudianteCursoService.get()
     const estudiantes = await this.get()
-    const filtrados = estudiantes.filter(({ id }) => estudianteCurso.some(({ estudiante, curso, fechaBaja }) => id == estudiante && curso == idCurso && (fechaBaja == null || fechaBaja == '')));
+    const filtrados = estudiantes.filter(({ id }) => estudianteCurso.some(({ idEstudiante, idCurso, fechaBaja }) => id == idEstudiante && idParam == idCurso && (fechaBaja == null || fechaBaja == '')));
     const resultado = filtrados//filtrados.sort((a, b) => a.apellido.localeCompare(b.apellido)) //esto ordena alfabéticamente
     console.log("RESULTADO: ",resultado)
     return resultado

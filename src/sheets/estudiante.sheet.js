@@ -17,7 +17,6 @@ async function get(){
     const registros =  await sheet.getRows()
 
     return registros
-    
 }
 
 async function getEstudianteCurso(){

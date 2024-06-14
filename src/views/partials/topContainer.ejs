@@ -1,45 +1,43 @@
 <!-- Image and text -->
 
-<nav class="navbar navbar-expand bg-primary">
-  <a class="navbar-brand text-right" href="/">
-    <img class="" src='/img/logoees62gris.png' width="30" height="30" />
-  </a>
- 
-  <div class="collapse navbar-collapse" id="navbarText">
-    E.E.S. N° 62
-    <ul class="navbar-nav mr-auto">
-     
-    </ul>    
-  </div>
-
-<div class="pr-1">
-  <%if(typeof(user) == "undefined"){%>
-    <a class="w3-button w3-section w3-blue w3-ripple" href="/auth/google"> <img class="" src='/img/logoabcai.png' height="30" /> Iniciar sesión </a>
-    <%} else {%>
-    <%if(user == null){%>
-     
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img class="" src='/img/logoees62gris.png' width="30" height="30" /> E.E.S. N° 62
+    </a>
+    <%if(typeof(user) == "undefined" || user == null){%>
       <a class="w3-button w3-section w3-blue w3-ripple" href="/auth/google"> <img class="" src='/img/logoabcai.png' height="30" /> Iniciar sesión </a>
-    
-  <%} else {%>
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-          <img src="<%= user.picture %>" class="" style="width:22px">
-          <span> <%= user.given_name %> <%= user.family_name %></span>
-        </a>
-        <div class="dropdown-menu">
-          <a href="/estudiantes/cargo" class="dropdown-item"><i class="fa fa-users"></i>  Estudiantes</a>
-          <a href="/docente/cargo" class="dropdown-item"><i class="fa fa-briefcase"></i>  Cargos</a>
-          <div class="dropdown-divider"></div>
-          <a href="/usuario/logout" class="dropdown-item" ><i class="fa fa-sign-out" ></i> Salir</a>
+      <%} else {%>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Estudiantes</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/estudiante/alta">Alta</a></li>
+                <li><a class="dropdown-item" href="#">Consulta</a></li>
+              </ul>
+            </li>
+          </ul>
         </div>
-      </li>
-    </ul>
-    <ul class="navbar-nav me-auto">
-
-    </ul>
-    
-  <%}%>
-  <%}%>
-</div>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img src="<%= user.picture %>" class="" style="width:22px">
+            <span> <%= user.given_name %> <%= user.family_name %></span>
+          </a>
+          
+          <div class="dropdown-menu">
+            <a href="/estudiantes/cargo" class="dropdown-item"><i class="fa fa-users"></i>  Estudiantes</a>
+            <a href="/docente/cargo" class="dropdown-item"><i class="fa fa-briefcase"></i>  Cargos</a>
+            <div class="dropdown-divider"></div>
+            <a href="/usuario/logout" class="dropdown-item" ><i class="fa fa-sign-out" ></i> Salir</a>
+          </div>
+        </li>
+      </ul>
+      
+    <%}%>
+  </div>
 </nav>

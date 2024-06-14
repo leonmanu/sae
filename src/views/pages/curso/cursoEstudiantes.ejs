@@ -42,12 +42,10 @@
           <% estudiantes.forEach(function(estudiante){ %>
             <% let rowid = "" %>
             <% let cLectivo %>
-            <% estudianteCursos.forEach(function(estudianteCurso){ %>
+            <% estudiantes.forEach(function(estudiante){ %>
               
-              <% if(estudiante.id == estudianteCurso.estudiante) {%>
-                <% rowid = estudianteCurso._rowNumber %>
-                <% cLectivo = estudianteCurso.cLectivo %>
-              <% } %>
+                <% rowid = estudiante._rowNumber %>
+                <% cLectivo = estudiante.cLectivo %>
             <% }) %>
           <tr row_id = '<%= rowid%>'>
            <td>
@@ -64,7 +62,7 @@
               </p>
             </td>
             <td>
-              <%=cLectivo%>
+              <%=estudiante.cLectivo%>
             </td>
 
 

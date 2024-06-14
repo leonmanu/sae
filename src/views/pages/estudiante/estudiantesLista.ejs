@@ -1,17 +1,15 @@
-<link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<%- include ../../partials/parte1Superior.ejs %>
 
-</head>
+
+    </head>
+    <body>
 
 <body>
   <% var i = 1 %>
   <!-- ///////////////////////////////////////////////////////7 -->
-  <% cursos.forEach(function(curso) { %>
     <% i = 1 %>
   <div class="container p-0 my-3"> 
     <h3 id="cursoClave">
-      Curso <%= curso.grado %>° <%= curso.division %>°
     </h3> 
     <div class="">
       <div>
@@ -24,7 +22,7 @@
             <th class="">N°</th>
             <th class="col-md-2">Estudiante</th>
             <th class="">DNI</th>
-            <th class="col-md-1"><small>Fecha:</small></th>
+            <th class="col-md-1"><small>Curso</small></th>
             <th class="col-md-1"><small>Fecha:</small></th>
             <th class="col-md-1"><small>Fecha:</small></th>
             <th class="col-md-1"><small>Fecha:</small></th>
@@ -33,21 +31,22 @@
           </tr>
         </thead>
         <tbody class="tbl_user_data">
-          <% estudiantesArray.forEach(function(registro) { %>
-            <% if( registro.estudianteCurso.curso == curso.idCurso ){%>
+          <% estudiantes.forEach(function(registro) { %>
           <tr class="p-0">
            <td>
             <%= i++ %>
            </td>
             <td>
-              <%= registro.estudiante.apellido %>, <%= registro.estudiante.nombre %>
+              <%= registro.apellido %>, <%= registro.nombre %>
             </td>
             <td>
-              <%= registro.estudiante.dni %>
+              <%= registro.dni %>
             </td>
             <td>
+              <%= registro.curso %>
             </td>
             <td>
+              <%= registro.cLectivo %>
             </td>
             <td>
             </td>
@@ -59,7 +58,6 @@
             </td>
           </tr>
           <!-- Modal -->
-          <% } %>
           <% }) %> 
         </tbody>
 
@@ -67,5 +65,5 @@
     </div>
   </div>
   <div style="page-break-after: always;"></div>
-  <% }) %> 
+
   <hr>

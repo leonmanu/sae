@@ -1,12 +1,13 @@
 const {Router} = require('express')
 const passport = require('passport')
 const router = Router()
-const {get, pintarForm, post, getInforme} = require('../controllers/estudiante.controller')
+const {pintarForm, post, getInforme} = require('../controllers/estudiante.controller')
+const {get} = require('../controllers/inicio.controller')
 
 const {siExisteUsuario} = require('../controllers/usuario.controller')
 const { getOne } = require('../sheets/estudiante.sheet')
 var sessionMiddelware = require('../middelware/session.middelware')
-
+console.log("ENTRÓ A GOOGLE ROUTE")
 
 router
     .get('/usuarioAlta', sessionMiddelware, function(req,res){
@@ -14,7 +15,7 @@ router
         res.render("pages/usuario/formularioAlta", {user: req.user})
     })
     .get('/prueba',sessionMiddelware, function(req,res){
-        console.log("appx ",req.user.displayName)
+        console.log("appx ",req.user.displayName) 
         res.render("pages/cualquiera",  {user: req.user})
     })
     .get('/', get)
