@@ -11,7 +11,7 @@ const cursoAsignaturaService = require('../services/cursoAsignatura.service')
 const getCursoYAsignatura = async (req, res) => {
     const curso = await cursoService.getPorClave(req.params.curso)
     const asignatura = await asignaturaService.getPorId(req.params.asignatura)
-    const estudiantes = await estudianteService.getPorIdCurso(curso.idCurso)
+    const estudiantes = await estudianteService.getPorIdCurso(curso.id)
     const calificaciones = await calificacionService.getPorAsignatura(req.params.asignatura)
     const calificacionCodigos = await calificacionCodigoService.getTodo()
 
