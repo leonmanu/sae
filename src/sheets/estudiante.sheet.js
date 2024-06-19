@@ -1,6 +1,6 @@
 const { GoogleSpreadsheetRow } = require('google-spreadsheet')
 const { GoogleSpreadsheet } = require('google-spreadsheet')
-const credenciales = require('../json/credecialSheets.json')
+const credenciales = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
 
 let documento = new GoogleSpreadsheet(process.env.SHEET_URI)
 let sheet
