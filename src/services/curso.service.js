@@ -51,10 +51,10 @@ const getPorClave = async (clave) => { //tiene que quedar, es el nuevo
 }
 
 const getPorId = async (idCurso) => {
-    const registros = await cursoSheet.getTodos()
-    const resultados = await registros.filter(row => row.idCurso === idCurso)
-    const resultadoJson = await utilidadesService.convertToJson(resultados)
-    return resultadoJson[0]
+    const registros = await cursoSheet.get()
+    const resultados = await registros.filter(row => row.id === idCurso)
+    //const resultadoJson = await utilidadesService.convertToJson(resultados)
+    return resultados[0]
 }
 
 module.exports = {

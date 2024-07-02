@@ -119,6 +119,7 @@ const put = async (elemento) => {
 const getCrudaPorIdEstudiante = async (id) => {
     registros = await boletinSheet.getValoracionCurda()
     filtrados = await registros.filter( row => row.estudiante == id )
+    console.log("filtrados: " + filtrados)
     const resultadoJson = await utilidadesService.convertToJson(filtrados)
     
     return resultadoJson

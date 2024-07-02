@@ -26,10 +26,12 @@ const getCursosTodos = async (req, res) => {
 
 const getEstudiantes = async (req, res) => {
     const clave = await req.params.clave
+    const cLectivo = await req.params.cLectivo
+
     const curso = await cursoService.getPorClave(clave)
     
     const cursos = await cursoService.getCursosTodos()
-    const estudiantes = await estudianteService.getPorIdCurso(curso.id)
+    const estudiantes = await estudianteService.getPorIdCurso(curso.id, cLectivo)
     console.log("estudiantes: " + estudiantes )
 
     //console.log("estudianteCursos: ", estudianteCursos)

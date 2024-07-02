@@ -68,9 +68,8 @@ async function getUno(rowId){
 
 async function getUnoPorIdEstudiante(id){
     const registros =  await estudianteCursoSheet.get()
-    const resultado = registros.filter(row => row.estudiante === id)
+    const resultado = registros.filter(row => row.idEstudiante === id)
     //const resultadoJson = await utilidadesService.convertToJson(resultado)
-    //console.log(resultadoJson[0])
 
     return resultado[0]
 }

@@ -22,7 +22,7 @@ router
           })
     })
     .get('/todos', getCursosTodos)
-    .get('/:clave/estudiantes', getEstudiantes)
+    .get('/:clave/estudiantes/:cLectivo?', getEstudiantes)
     .get('/:clave/boletines', getBoletinesPorCurso)
     .get('/:clave/semaforo', getSemaforoPorCurso)
     .get('/:clave/asignaturas', getPorCurso)

@@ -80,14 +80,38 @@ async function getPorCurso(clave){//1* anterior, próximo a borrar
     return resultadoJson
 }
 
-async function getPorIdCurso(idParam){//1* este debería reemplazar a getPorCurso()
-    const estudianteCurso =  await estudianteCursoService.get()
-    const estudiantes = await this.get()
-    const filtrados = estudiantes.filter(({ id }) => estudianteCurso.some(({ idEstudiante, idCurso, fechaBaja }) => id == idEstudiante && idParam == idCurso && (fechaBaja == null || fechaBaja == '')));
-    const resultado = filtrados//filtrados.sort((a, b) => a.apellido.localeCompare(b.apellido)) //esto ordena alfabéticamente
-    console.log("RESULTADO: ",resultado)
-    return resultado
+async function getPorIdCurso(idCursoParam, cLectivo = null) {
+    const estudianteCurso = await estudianteCursoService.get();
+    const estudiantes = await this.get();
+
+    let filtrados = estudiantes
+        .map(estudiante => {
+            const curso = estudianteCurso.find(({ idEstudiante, idCurso, fechaBaja }) =>
+                estudiante.id === idEstudiante && idCursoParam === idCurso && (!fechaBaja || fechaBaja === '')
+            );
+            return curso ? { ...estudiante, cLectivo: curso.cLectivo } : null;
+        })
+        .filter(estudiante => estudiante !== null);
+
+    if (cLectivo) {
+        filtrados = filtrados.filter(estudiante => estudiante.cLectivo === cLectivo);
+    } else {
+        const cicloLectivoUltimo = filtrados
+            .map(estudiante => estudiante.cLectivo)
+            .filter(cicloLectivo => cicloLectivo !== undefined && cicloLectivo !== null)
+            .sort((a, b) => b.localeCompare(a))[0];
+
+        filtrados = filtrados.filter(estudiante => estudiante.cLectivo === cicloLectivoUltimo);
+    }
+
+    //filtrados.sort((a, b) => a.apellido.localeCompare(b.apellido));
+
+    console.log("Filtrados: ", filtrados);
+    return filtrados; // Asegúrate de que siempre devuelve un array
 }
+
+
+
 
 // async function getPorIdCurso(clave){
 //     const registros =  await estudianteSheet.getTodoPorCurso()

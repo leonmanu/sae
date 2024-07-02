@@ -97,9 +97,11 @@ const getPorDni = async (req, res) => {//cambiar nombre de función
     
     const estudiante = await estudianteService.getPorDni(dni)
     const estudinateCurso = await estudianteCursoService.getUnoPorIdEstudiante(estudiante.id)
-    const curso = await cursoService.getPorId(estudinateCurso.curso)
-    const asignaturas = await asignaturaService.getAsignaturasPorIdCurso(curso.idCurso)
+    console.log("ESTUDIANTE-CURSO ID ENCONTRADO: " + estudinateCurso.idCurso)
+    const curso = await cursoService.getPorId(estudinateCurso.idCurso)
+    const asignaturas = await asignaturaService.getAsignaturasPorIdCurso(curso.id)
     const calificaciones = await calificacionService.getCrudaPorIdEstudiante(estudiante.id)
+    console.log("CALIFICACIONES: " + calificaciones)
     //const calificaciones = await calificacionService.getPorDni(dni)
 
     const user = null
