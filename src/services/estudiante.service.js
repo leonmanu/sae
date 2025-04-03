@@ -4,11 +4,8 @@ const estudianteSheet =  require("../sheets/estudiante.sheet")
 const estudianteCursoSheet =require("../sheets/estudianteCurso.sheet")
 const estudianteCursoService =require("../services/estudianteCurso.service")
 const utilidadesService = require('./utilidades.service')
-const estudianteSchema = require('../models/estudiante.schema')
-const estudianteDb = require('../db/estudiante.db')
 const personaService = require('./persona.service')
-const PersonaClass = require('../models/persona.class')
-const EstudianteClass = require('../models/estudiante.class')
+const EstudianteRepository = require('../repositories/estudiante.repository');
 const { v4: uuidv4 } = require('uuid');
 
 const get = async () => { //este trae de la hoja estudiantes
@@ -123,19 +120,9 @@ async function getPorIdCurso(idCursoParam, cLectivo = null) {
 
 async function post(objeto) {
     try {
-
-        objeto["id"] = objeto.personaId = uuidv4(); // Genera un UUID único
-        const persona = await personaService.postPersona(objeto);
-
-        objeto["id"] = uuidv4();
-        const estudiante = await estudianteSheet.post(objeto)
-  
-      // Llama al servicio de creación de persona y estudiante
-      
-      //const registroEstudiante = await estudianteSheet.post(estudianteClass);
-  
-      return persona;
-
+        const estudiante = await EstudianteRepository.crearEstudiante(objeto);
+        //console.log(estudiante)
+        return estudiante
     } catch (error) {
       // Manejo de errores
       console.error('Error al crear estudiante:', error);

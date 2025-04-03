@@ -1,11 +1,8 @@
 let sheet = require('../sheets/estudiante.sheet')
 let cursoSheet = require('../sheets/curso.sheet')
 const estudianteService = require('../services/estudiante.service')
-const estudianteSchema = require('../models/estudiante.schema')
 const cursoService = require('../services/curso.service')
 const estudianteCursoService = require('../services/estudianteCurso.service')
-
-
 
 const get = async (req, res) => {
     try {
@@ -70,19 +67,28 @@ const getPorId = async (req, res) => {
 }
 
 const getFormularioAlta = async (req, res) => {
-    const registro = await estudianteService.getUno(req.params.dni)
-    let estudiante
-    if (registro) {
-        estudiante = registro
-        console.log("por sí")
-    }else{
-        estudiante = {
-            id: null
-        }
-        console.log("por no")
+    try {
+        const registro = await estudianteService.getUno(req.params.dni);
+        const cursos = await cursoService.get();
+        
+        // Generar array de años (desde el actual hasta 20 años atrás)
+        const anioActual = new Date().getFullYear();
+        const aniosDisponibles = Array.from({ length: 21 }, (_, i) => anioActual - i);
+        
+        res.render("pages/estudiante/estudianteAlta", {
+            user: req.user,
+            estudiante: registro || { id: null },
+            cursos,
+            anios: aniosDisponibles  // Enviamos los años a la vista
+        });
+        
+    } catch (error) {
+        res.status(500).render('pages/error', { 
+            error: 'Error al cargar el formulario',
+            user: req.user 
+        });
     }
-    res.render("pages/estudiante/estudianteAlta", {user: req.user,estudiante})
-}
+};
 
 const getTodosLista = async (req, res) => {
     const estudiantesArray = []
@@ -116,10 +122,24 @@ const pintarForm = (req, res) => {
 }
 
 const post = async (req, res) => {
-    const objeto = await req.body
-    estudiante = await estudianteService.post(objeto)
-    await console.log("ESTUDIANTE -> "+estudiante.apellido)
-    res.send(estudiante)
+    try {
+        const objeto = await req.body
+        nuevoEstudiante = await estudianteService.post(objeto)
+        res.status(201).json({
+            success: true,
+            data: nuevoEstudiante,
+            message: 'Estudiante creado exitosamente'
+        })                         
+    } catch (error) {
+        // 4. Manejo de errores
+        const statusCode = error.message.includes('ya existe') ? 409 : 500;
+        
+        res.status(statusCode).json({
+            success: false,
+            message: error.message,
+            error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        })
+    }
 
     //res.redirect('/')
 }

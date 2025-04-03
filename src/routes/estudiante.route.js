@@ -2,8 +2,6 @@ const {Router} = require('express')
 const passport = require('passport')
 const router = Router()
 
-const estudianteSchema = require('../models/estudiante.schema')
-
 const {
             getPorCursoAsignatura,
             getPorId, 

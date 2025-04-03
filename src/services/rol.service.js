@@ -1,6 +1,5 @@
 const req = require('express/lib/request')
 const rolSheet =  require("../sheets/rol.sheet")
-const { RolDto } = require('../models/rol.class')
 const utilidadesService = require('./utilidades.service')
 
 const get = async () => {

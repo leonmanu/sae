@@ -1,3 +1,4 @@
+const express = require('express')
 const mongoose = require('mongoose')
 require("dotenv").config()
 
@@ -9,7 +10,6 @@ require("dotenv").config()
 //   )
 //   .catch((err) => console.error(err))
 
-const express = require('express')
 
 const path = require("path")
 const bodyParser = require('body-parser')
@@ -31,11 +31,13 @@ var sessionMiddelware = require('./middelware/session.middelware')
 const usuarioController = require('./controllers/usuario.controller')
 const LocalStrategy = require('passport-local').Strategy
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
-
-
-
 const app = express()
 var hour = 36000000;
+
+mongoose.connect('mongodb+srv://leonmanu:Gusanito@calificador.dtcbf.mongodb.net/crud?retryWrites=true&w=majority')
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error conectando a MongoDB:', err))
+
 app    
     .use(express.static(__dirname + '/public'))
     .set("views", path.join(__dirname, "/views"))

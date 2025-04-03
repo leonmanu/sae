@@ -1,100 +1,268 @@
-<script src="/js/cursoEstudianteAlta.ajax.js"></script>
-<img class="pull-right" id="waitIconAsignatura" src='/img/whiteIconGrisSegmentos.gif' style="display:none" width="22" height="22" />
-<div class="">
-  <form action="/estudiante/<%= estudiante.id ? 'editar' : 'alta' %>" method="post" class="">
-    <input id="id" value="<%= estudiante ? estudiante.id : '' %>" class="form-control" type="number" name="id" style="display:none">
-    <div class="row">
+<%- include ../../partials/parte1Superior.ejs %>
+</head>
 
-      <div class="col-md-4 mb-2">
-        <label for="dni" class="form-label">DNI</label>
-        <input id="dni" value="<%= estudiante.dni %>" class="form-control" type="number" placeholder="N° de DNI" name="dni" required>
-      </div>
+<body>
+  <%- include ./estudiantes_navbar.ejs %>
 
-      <div class="col-md-4 mb-2">
-        <label for="apellido" class="form-label">Apellido/s</label>
-        <input id="apellido" value="<%= estudiante.apellido %>" class="form-control" type="text" placeholder="Apellido/s del/la estudiante" name="apellido" required>
-      </div>
-
-      <div class="col-md-4 mb-2">
-        <label for="nombre" class="form-label">Nombre/s</label>
-        <input id="nombre" value="<%= estudiante.nombre %>" class="form-control" type="text" placeholder="Nombre/s del/la estudiante" name="nombre" required>
-      </div>
+  <div class="container p-0 my-3">
     
-    </div>
-    <hr>
-    <div class="row">
-
-      <div class="col-md-4 mb-2">
-        <p id="fecha" style="display: none;"><%= estudiante.nacimientoFecha %></p>
-        <label for="nacimientoFecha" class="form-label">Fecha de Nac.</label>
-        <input id="nacimientoFecha" value="2022-01/01" class="form-control" type="date" placeholder="Fecha de nacimiento del/la estudiante" name="nacimientoFecha" >
-      </div>
-
-      <div class="col-md-4 mb-2">
-        <label for="nacimientoLugar" class="form-label">Lugar de Nac.</label>
-        <input id="nacimientoLugar" value="<%= estudiante.nacimientoLugar %>" class="form-control" type="text" placeholder="Lugar de Nacimiento" name="nacimientoLugar" >
-      </div>
-
-      <div class="col-md-4 mb-2">
-        <label for="nacionalidad" class="form-label">Nacionalidad</label>
-        <input id="nacionalidad" value="<%= estudiante.nacionalidad %>" class="form-control" type="text" placeholder="Nacionalidad" name="nacionalidad" >
-      </div>
-
-    </div>
-    <hr>
-    <div class="row">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="mb-0"><%= estudiante.id ? 'Editar Estudiante' : 'Alta de Estudiante' %></h3>
+      <select class="form-select w-auto" name="cicloLectivo" required>
+        <option value="" disabled selected>Seleccione el año</option>
+        <% anios.forEach(anio => { %>
+            <option value="<%= anio %>"><%= anio %></option>
+        <% }); %>
+      </select>
       
-      <div class="col-md-3 mb-2">
-        <label for="calle" class="form-label">Calle</label>
-        <input id="calle" value="<%= estudiante.calle %>" class="form-control" type="text" placeholder="Nombre de la calle" name="calle" >
-      </div>
-
-      <div class="col-md-1 mb-2">
-        <label for="numero" class="form-label">N°</label>
-        <input id="numero" value="<%= estudiante.numero %>" class="form-control" type="text" placeholder="Número del domicilio" name="numero">
-      </div>
-
-      <div class="col-md-3 mb-2">
-        <label for="localidad" class="form-label">Localidad</label>
-        <input id="localidad" value="<%= estudiante.localidad %>" class="form-control" type="text" placeholder="Localidad" name="localidad">
-      </div>
-
-      <div class="col-md-2 mb-2">
-        <label for="telefono1" class="form-label">Teléfono</label>
-        <input id="telefono1" value="<%= estudiante.telefono1 %>" class="form-control" type="tel" placeholder="Número de teléfono" name="telefono1">
-      </div>
-
-      <div class="col-md-3 mb-2">
-        <label for="mail" class="form-label">Email</label>
-        <input id="mail" value="<%= estudiante.mail %>" class="form-control" type="email" placeholder="Correo electrónico" name="mail" >
-      </div>
-      
+      <select class="form-select w-auto" id="cursoId" name="cursoId" required>
+        <option value="" disabled selected>Seleccione un curso</option>
+        <% cursos.forEach(curso => { %>
+          <option value="<%= curso.id %>">
+            <%= curso.clave %> - <%= curso.turno %>
+          </option>
+        <% }); %>
+      </select>
     </div>
-    <br>
-    <div class="btn-group  col-md-12">
-      <button id="btnEnviar" class="btn btn-outline-success" type="submit">
-        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-        Guardar
-      </button>
-      <button id="btnLimpar" class="btn btn-outline-primary " type="reset">
-        <i class="fa fa-eraser" aria-hidden="true"></i>
-        Limpiar
-      </button>
-      <button id="btnCancelar" class="btn btn-outline-warning" type="button">
-        <i class="fa fa-ban" aria-hidden="true"></i>
-        Cancelar
-      </button>
+    
+    <!-- Alert minimalista de Bootstrap -->
+    <div id="formAlert" class="alert alert-dismissible fade" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: none;">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <span id="alertMessage"></span>
     </div>
-  </form>
-  <hr>
-</div>
 
-<script>
-  $( document ).ready(function() {
-        var fecha = $('#fecha').html()
-        var info = fecha.split('-').reverse().join('-')
-        $('#nacimientoFecha').val(info)
+    <div class="w3-ul w3-card-4 w3-white p-4">
+      <form id="estudianteForm">
+        
+        <input type="hidden" name="id" value="<%= estudiante.id || '' %>">
 
-        return info;
-});
+        <!-- Sección Documentación -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Documentación</h5>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="tipoDocumento" class="form-label">Tipo de Documento *</label>
+            <select class="form-select" id="tipoDocumento" name="tipoDocumento" required>
+              <option value="DNI" <%= estudiante.tipoDocumento === 'DNI' ? 'selected' : '' %>>DNI</option>
+              <option value="LE" <%= estudiante.tipoDocumento === 'LE' ? 'selected' : '' %>>Libreta de Enrolamiento</option>
+              <option value="LC" <%= estudiante.tipoDocumento === 'LC' ? 'selected' : '' %>>Libreta Cívica</option>
+            </select>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="documento" class="form-label">Número de Documento *</label>
+            <input type="text" class="form-control" id="documento" name="documento" 
+                   value="<%= estudiante.documento || '' %>" required>
+          </div>
+        </div>
+
+        <!-- Sección Datos Personales -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Datos Personales</h5>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="nombre" class="form-label">Nombre/s *</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" 
+                   value="<%= estudiante.nombre || '' %>" required>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="apellido" class="form-label">Apellido/s *</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" 
+                   value="<%= estudiante.apellido || '' %>" required>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento *</label>
+            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" 
+                   value="<%= estudiante.fechaNacimiento ? estudiante.fechaNacimiento.toISOString().split('T')[0] : '' %>" required>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="genero" class="form-label">Género *</label>
+            <select class="form-select" id="genero" name="genero" required>
+              <option value="Masculino" <%= estudiante.genero === 'Masculino' ? 'selected' : '' %>>Masculino</option>
+              <option value="Femenino" <%= estudiante.genero === 'Femenino' ? 'selected' : '' %>>Femenino</option>
+              <option value="Otro" <%= estudiante.genero === 'Otro' ? 'selected' : '' %>>Otro</option>
+            </select>
+          </div>
+          
+          <div class="col-md-8 mb-3">
+            <label for="lugarNacimiento" class="form-label">Lugar de Nacimiento *</label>
+            <input type="text" class="form-control" id="lugarNacimiento" name="lugarNacimiento" 
+                   value="<%= estudiante.lugarNacimiento || '' %>" required>
+          </div>
+        </div>
+
+        <!-- Sección Datos Escolares (Estudiante) -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Datos Escolares</h5>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="libro" class="form-label">Libro *</label>
+            <input type="text" class="form-control" id="libro" name="libro" 
+                   value="<%= estudiante.libro || '' %>" required>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="folio" class="form-label">Folio *</label>
+            <input type="text" class="form-control" id="folio" name="folio" 
+                   value="<%= estudiante.folio || '' %>" required>
+          </div>
+        </div>
+
+        <!-- Sección Contacto -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Contacto</h5>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" class="form-control" id="email" name="email" 
+                   value="<%= estudiante.email || '' %>" required>
+            <div class="form-text">Ejemplo: ejemplo@dominio.com</div>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="telefono" class="form-label">Teléfono *</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                   value="<%= estudiante.telefono || '' %>" required>
+            <div class="form-text">10 dígitos sin espacios</div>
+          </div>
+        </div>
+
+        <!-- Sección Domicilio -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Domicilio</h5>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="domicilioCalle" class="form-label">Calle *</label>
+            <input type="text" class="form-control" id="domicilioCalle" name="domicilioCalle" 
+                   value="<%= estudiante.domicilioCalle || '' %>" required>
+          </div>
+          
+          <div class="col-md-2 mb-3">
+            <label for="domicilioNumero" class="form-label">Número *</label>
+            <input type="text" class="form-control" id="domicilioNumero" name="domicilioNumero" 
+                   value="<%= estudiante.domicilioNumero || '' %>" required>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="domicilioBarrio" class="form-label">Barrio *</label>
+            <input type="text" class="form-control" id="domicilioBarrio" name="domicilioBarrio" 
+                   value="<%= estudiante.domicilioBarrio || '' %>" required>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="domicilioLocalidad" class="form-label">Localidad *</label>
+            <input type="text" class="form-control" id="domicilioLocalidad" name="domicilioLocalidad" 
+                   value="<%= estudiante.domicilioLocalidad || '' %>" required>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i> Cancelar
+          </button>
+          <div>
+            <button type="reset" class="btn btn-outline-warning me-2">
+              <i class="fa fa-eraser"></i> Limpiar
+            </button>
+            <button type="submit" class="btn btn-success">
+              <i class="fa fa-save"></i> <%= estudiante.id ? 'Actualizar' : 'Guardar' %>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+        // Cacheamos elementos
+        const $form = $('#estudianteForm');
+        const $alert = $('#formAlert');
+        const $alertMessage = $('#alertMessage');
+        const $submitBtn = $form.find('button[type="submit"]');
+
+        // Función mejorada para mostrar alertas
+        function showAlert(message, type = 'success') {
+            // Resetear clases y contenido
+            $alert.removeClass('alert-success alert-danger show')
+                  .addClass(`alert-${type} show`)
+                  .hide();
+            
+            $alertMessage.text(message);
+            
+            // Mostrar con animación y ocultar después
+            $alert.fadeIn(300).delay(2000).fadeOut(300);
+        }
+
+        // Manejo del formulario
+        $form.on('submit', function(e) {
+            e.preventDefault();
+            
+            const originalText = $submitBtn.html();
+            $submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+
+            $.ajax({
+                url: $form.attr('action') || '/estudiante/alta',
+                type: $form.attr('method') || 'POST',
+                data: $form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        showAlert(response.message || '¡Guardado exitoso!');
+
+                        const valoresPersistentes = {
+                            cursoId: $('#cursoId').val()
+                            // Puedes agregar otros campos aquí si es necesario
+                        };
+
+                        $form[0].reset();
+
+                        Object.keys(valoresPersistentes).forEach(key => {
+                            if (valoresPersistentes[key]) {
+                                $(`#${key}`).val(valoresPersistentes[key]);
+                            }
+                        });
+                        
+                        // Enfocar el primer campo después del reset
+                        setTimeout(() => {
+                            $form.find('input:visible, select:visible').first().focus();
+                        }, 100);
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.message || 'Error en el servidor';
+                    showAlert(errorMsg, 'danger');
+                },
+                complete: function() {
+                    $submitBtn.prop('disabled', false).html(originalText);
+                }
+            });
+        });
+
+        // Validaciones
+        $('#email').on('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            $(this).toggleClass('is-invalid', !emailRegex.test(this.value));
+        });
+
+        $('#telefono').on('blur', function() {
+            const phoneRegex = /^[0-9]{10}$/;
+            $(this).toggleClass('is-invalid', !phoneRegex.test(this.value));
+        });
+    });
 </script>
+
+<%- include ../../partials/parte2Inferior.ejs %>

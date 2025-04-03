@@ -3,9 +3,6 @@ const { head } = require('request')
 const estudianteSheet =  require("../sheets/estudiante.sheet")
 const estudianteCursoSheet =require("../sheets/estudianteCurso.sheet")
 const utilidadesService = require('./utilidades.service')
-const estudianteSchema = require('../models/estudiante.schema')
-const estudianteDb = require('../db/estudiante.db')
-const usuarioDb = require('../db/usuario.db')
 const usuarioSheet = require('../sheets/usuario.sheet')
 
 
