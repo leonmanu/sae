@@ -8,21 +8,6 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="mb-0"><%= estudiante.id ? 'Editar Estudiante' : 'Alta de Estudiante' %></h3>
-      <select class="form-select w-auto" name="cicloLectivo" required>
-        <option value="" disabled selected>Seleccione el año</option>
-        <% anios.forEach(anio => { %>
-            <option value="<%= anio %>"><%= anio %></option>
-        <% }); %>
-      </select>
-      
-      <select class="form-select w-auto" id="cursoId" name="cursoId" required>
-        <option value="" disabled selected>Seleccione un curso</option>
-        <% cursos.forEach(curso => { %>
-          <option value="<%= curso.id %>">
-            <%= curso.clave %> - <%= curso.turno %>
-          </option>
-        <% }); %>
-      </select>
     </div>
     
     <!-- Alert minimalista de Bootstrap -->
@@ -35,6 +20,37 @@
       <form id="estudianteForm">
         
         <input type="hidden" name="id" value="<%= estudiante.id || '' %>">
+
+
+        <!-- Sección Documentación -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h5 class="border-bottom pb-2">Curso</h5>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="tipoDocumento" class="form-label">Tipo de Documento *</label>
+            <select class="form-select" id="cicloLectivo" name="cicloLectivo" required></select>
+              <option value="" disabled selected>Seleccione el año</option>
+              <% anios.forEach(anio => { %>
+                  <option value="<%= anio %>"><%= anio %></option>
+              <% }); %>
+            </select>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="documento" class="form-label">Número de Documento *</label>
+            <select class="form-select w-auto" id="cursoId" name="cursoId" required>
+              <option value="" disabled selected>Seleccione un curso</option>
+              <% cursos.forEach(curso => { %>
+                <option value="<%= curso.id %>">
+                  <%= curso.clave %> - <%= curso.turno %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+
 
         <!-- Sección Documentación -->
         <div class="row mb-4">
